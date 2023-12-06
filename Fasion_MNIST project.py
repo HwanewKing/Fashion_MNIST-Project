@@ -51,6 +51,7 @@ print("train score: " ,model.score(X_train , y_train))
 print("test score: ",model.score(X_test , y_test))
 '''
 
+'''
 # SGDclassifier
 from sklearn.linear_model import SGDClassifier
 
@@ -61,13 +62,13 @@ test_score = []
 classes = np.unique(y_train)
 
 #epoch 300으로 학습 (300번 학습)
-for epoch in range(20):
+for epoch in range(300):
   model.partial_fit(X_train, y_train, classes=classes)
   train_score.append(model.score(X_train, y_train))
   test_score.append(model.score(X_test, y_test))
 
 
-x=np.arange(0,20)
+x=np.arange(0,300)
 
 fig, ax1 = plt.subplots()
 ax1.plot(x, train_score, color='r')
@@ -80,3 +81,39 @@ plt.show()
 
 print("train score: " ,train_score[-1])
 print("test score: ",test_score[-1])
+'''
+'''
+# KNN, KNeighborsClassifier
+from sklearn.neighbors import KNeighborsClassifier
+knns=[]
+train_score=[]
+test_score=[]
+
+for i in range(2,10):
+    KNC=KNeighborsClassifier(i)
+    KNC.fit(X_train,y_train)
+    print("이웃수 : {}인 모델 학습 완료".format(i))
+    knns.append(KNC)
+    
+    n=2
+for model in knns:
+    acc_train=model.score(X_train,y_train)
+    acc_test=model.score(X_test,y_test)
+    train_score.append(acc_train)
+    test_score.append(acc_test)
+    print(n)
+    print(acc_train)
+    print(acc_test)
+    n=n+1
+    
+x=np.arange(2,10)
+
+fig, ax1 = plt.subplots()
+ax1.plot(x, train_score, color='r')
+ax2 =ax1.twinx()
+ax2.plot(x, test_score)
+plt.xlabel('i')
+plt.ylabel('moodel score')
+
+plt.show()
+'''
