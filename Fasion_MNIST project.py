@@ -1,17 +1,20 @@
 from sklearn.datasets import fetch_openml
 import numpy as np
-import matplotlib as mpl
 import matplotlib.pyplot as plt
 
 fashion_mnist = fetch_openml('Fashion-MNIST',version=1, as_frame=False)
 fashion_mnist.keys()
-
+    
 X,y = fashion_mnist["data"], fashion_mnist["target"]
-# X data
-# y label
+# X is data
+# y is label
+
 print(X.shape)
 print(y.shape)
 y=y.astype(np.uint8) # X.dtype = float64 , y.dtype = uint8
+print(X.dtype)
+print(y.dtype)
+
 
 labels=["T-shirt/top", #0
         "Trouser",     #1
@@ -27,13 +30,6 @@ labels=["T-shirt/top", #0
 def IndexToLabel(index):
     return labels[index]
 
-some_digit = X[0]
-some_digit_image = some_digit.reshape(28,28)
-print(IndexToLabel(y[0]))
-
-plt.imshow(some_digit_image, cmap='binary')
-plt.axis('off')
-plt.show()
 
 X_train, X_test, y_train, y_test = X[:60000], X[60000:],y[:60000],y[60000:]
 
@@ -41,8 +37,31 @@ X_train, X_test, y_train, y_test = X[:60000], X[60000:],y[:60000],y[60000:]
 X_train=X_train/255.0
 X_test=X_test/255.0
 
+print(X_train[0])
+
+#print(np.unique(y_train, return_counts = True)) #각 레이블의 개수 파악
+
+# 그림 예시 출력
 '''
+fig, axs = plt.subplots(3, 3, figsize=(28,28))
+fig.subplots_adjust(wspace=0.5, hspace=0.5)
+
+X_train_image = []
+X_train_index = []
+
+for i in range(9): 
+    X_train_image.append(X_train[i].reshape(28, 28))
+    axs[i // 3, i % 3].imshow(X_train_image[i], cmap='binary')
+    axs[i // 3, i % 3].axis('off')
+    X_train_index.append(IndexToLabel(y_train[i]))
+    axs[i // 3, i % 3].set_title(IndexToLabel(y_train[i]),fontsize=50)
+
+plt.show()
+'''
+
 # 로지스틱 회귀
+'''
+
 from sklearn.linear_model import LogisticRegression
 
 model = LogisticRegression()
@@ -51,8 +70,9 @@ print("train score: " ,model.score(X_train , y_train))
 print("test score: ",model.score(X_test , y_test))
 '''
 
-'''
 # SGDclassifier
+'''
+
 from sklearn.linear_model import SGDClassifier
 
 #model 만들기
@@ -61,7 +81,7 @@ train_score = []
 test_score = []
 classes = np.unique(y_train)
 
-#epoch 300으로 학습 (300번 학습)
+#epoch n으로 학습 (n번 학습)
 for epoch in range(300):
   model.partial_fit(X_train, y_train, classes=classes)
   train_score.append(model.score(X_train, y_train))
@@ -82,8 +102,10 @@ plt.show()
 print("train score: " ,train_score[-1])
 print("test score: ",test_score[-1])
 '''
-'''
+
 # KNN, KNeighborsClassifier
+'''
+
 from sklearn.neighbors import KNeighborsClassifier
 knns=[]
 train_score=[]
@@ -117,3 +139,4 @@ plt.ylabel('moodel score')
 
 plt.show()
 '''
+
