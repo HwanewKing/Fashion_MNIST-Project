@@ -19,7 +19,7 @@ X_test=X_test/255.0
 from sklearn.linear_model import SGDClassifier
 
 #model 만들기
-model = SGDClassifier(loss = 'log') # loss 함수를 log로 지정
+model = SGDClassifier(loss = 'log') # loss 함수를 로지스틱 손실 함수로 지정
 classes = np.unique(y_train)
 
 import time
@@ -28,12 +28,12 @@ MaxData=[]
 MaxIndex=[]
 TimeData=[]
 
-for n in range(5):
+for n in range(20):
     
     TimeArray=[]
     test_score=[]
     
-    for epoch in range(100):
+    for epoch in range(300):
         StartTime=time.time()
         model.partial_fit(X_train, y_train, classes=classes)
         EndTime=time.time()
