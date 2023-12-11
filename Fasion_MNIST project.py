@@ -10,13 +10,13 @@ X,y = fashion_mnist["data"], fashion_mnist["target"]
 # X is data
 # y is label
 
-#print(X.shape)
-#print(y.shape)
+print(X.shape)
+print(y.shape)
 y=y.astype(np.uint8) # X.dtype = float64 , y.dtype = uint8
-#print(X.dtype)
-#print(y.dtype)
+print(X.dtype)
+print(y.dtype)
 
-'''
+
 labels=["T-shirt/top", #0
         "Trouser",     #1
         "Pullover",    #2
@@ -30,7 +30,7 @@ labels=["T-shirt/top", #0
 
 def IndexToLabel(index):
     return labels[index]
-'''
+
 
 X_train, X_test, y_train, y_test = X[:60000], X[60000:],y[:60000],y[60000:]
 
@@ -38,12 +38,12 @@ X_train, X_test, y_train, y_test = X[:60000], X[60000:],y[:60000],y[60000:]
 X_train=X_train/255.0
 X_test=X_test/255.0
 
-#print(X_train[0])
+print(X_train[0])
 
-#print(np.unique(y_test, return_counts = True)) #각 레이블의 개수 파악
+print(np.unique(y_test, return_counts = True)) #각 레이블의 개수 파악
 
 # 그림 예시 출력
-'''
+
 fig, axs = plt.subplots(3, 3, figsize=(28,28))
 fig.subplots_adjust(wspace=0.5, hspace=0.5)
 
@@ -51,31 +51,31 @@ X_train_image = []
 X_train_index = []
 
 for i in range(9): 
-    X_train_image.append(X_train[i].reshape(28, 28))
+    X_train_image.append(X_train[18+i].reshape(28, 28))
     axs[i // 3, i % 3].imshow(X_train_image[i], cmap='binary')
     axs[i // 3, i % 3].axis('off')
-    X_train_index.append(IndexToLabel(y_train[i]))
-    axs[i // 3, i % 3].set_title(IndexToLabel(y_train[i]),fontsize=50)
+    X_train_index.append(IndexToLabel(y_train[18+i]))
+    axs[i // 3, i % 3].set_title(IndexToLabel(y_train[18+i]),fontsize=50)
 
 plt.show()
-'''
 
 
-# 로지스틱 회귀
-'''
-from sklearn.linear_model import LogisticRegression
 
+# KNN, KNeighborsClassifier
+from sklearn.neighbors import KNeighborsClassifier
+
+test_score=[]
 StartTime=time.time()
-model = LogisticRegression()
-model.fit(X_train , y_train)
+model=KNeighborsClassifier(4)
+model.fit(X_train,y_train)
 EndTime=time.time()
-print("학습에 걸린 시간 : ",EndTime-StartTime,"sec")
-print("test score: ",model.score(X_test , y_test))
-'''
+acc_test=model.score(X_test,y_test)
+print("학습에 걸린 시간 : ",EndTime-StartTime)
+print("test score : ",acc_test)
+
 
 
 # SGDclassifier
-'''
 from sklearn.linear_model import SGDClassifier
 
 #model 만들기
@@ -97,35 +97,28 @@ for epoch in range(300):
     test_score.append(model.score(X_test, y_test))
 
 maximum=max(test_score)
-print("test scores : ",maximum)
+print("학습에 걸린 시간 : ",TimeArray[-1],"sec")
+print("test score : ",maximum)
 print("index : ",test_score.index(maximum))
 
-x=np.arange(0,300)
-
-fig, ax1 = plt.subplots()
-ax1.plot(x, test_score)
-plt.xlabel('epoch')
-plt.ylabel('moodel score')
-
-f,a=plt.subplots()
-a.plot(x,TimeArray)
-plt.xlabel('epoch')
-plt.ylabel('time')
-
-plt.show()
-'''
 
 
-# KNN, KNeighborsClassifier
+# 로지스틱 회귀
+from sklearn.linear_model import LogisticRegression
 
-from sklearn.neighbors import KNeighborsClassifier
-
-test_score=[]
 StartTime=time.time()
-model=KNeighborsClassifier(4)
-model.fit(X_train,y_train)
+model = LogisticRegression()
+model.fit(X_train , y_train)
 EndTime=time.time()
-acc_test=model.score(X_test,y_test)
-print("학습에 걸린 시간 : ",EndTime-StartTime)
-print("test score : ",acc_test)
+print("학습에 걸린 시간 : ",EndTime-StartTime,"sec")
+print("test score: ",model.score(X_test , y_test))
+
+
+
+
+
+
+
+
+
 
